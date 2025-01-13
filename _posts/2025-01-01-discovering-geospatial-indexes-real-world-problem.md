@@ -64,6 +64,15 @@ These structures allow the system to perform spatial queries, such as:
 - Aggregate data within a defined region based on hexagonal cells.
 - Search for all points or polygons intersecting a specific bounding box.
 
+### Comparative Analysis of Geospatial Indexes
+
+| **Index Type** | **Advantages**                                                                 | **Disadvantages**                                              |
+|----------------|-----------------------------------------------------------------------------|----------------------------------------------------------------|
+| **R-trees**    | Efficient for range queries and point-in-polygon checks.                    | Performance can degrade with skewed or overlapping data.      |
+| **Quadtrees**  | Simple implementation and works well for spatial partitioning.              | Can become imbalanced with irregular data distributions.      |
+| **KD-trees**   | Effective for low-dimensional data (e.g., 2D, 3D).                         | Less efficient for higher dimensions or complex shapes.       |
+| **Hextrees**   | Uniform coverage of the earth, supports multi-resolution queries, scalable. | Limited support for non-hexagonal geometries.                 |
+
 ## Results and Benefits
 
 After implementing the geospatial index, the performance improvements were dramatic:
