@@ -101,3 +101,7 @@ After implementing the geospatial index, the performance improvements were drama
 Geospatial indexes are powerful tools for optimizing spatial queries, if you are working on a location-based application
 with complex spatial data,
 consider exploring geospatial indexes to unlock better performance and scalability.
+
+### Coming Up Next
+
+Stay tuned for the next post in this series: [**Building a Geospatial Index from Scratch: First Steps**](/posts/building-geospatial-index-first-steps/).
