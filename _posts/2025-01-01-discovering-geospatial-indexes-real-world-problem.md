@@ -53,9 +53,6 @@ Geospatial indexes often use tree-based structures, such as:
 - **Hextrees**: Use hexagonal grids to divide the earth into cells of varying
   resolution, providing a highly efficient and scalable indexing system.
 
-![img-description](/assets/img/geospatial/hextree.png)
-_Hextree_
-
 These structures allow the system to perform spatial queries, such as:
 
 - Find all polygons containing this point.
@@ -72,6 +69,17 @@ These structures allow the system to perform spatial queries, such as:
 | **Quadtrees**  | Simple implementation and works well for spatial partitioning.              | Can become imbalanced with irregular data distributions.      |
 | **KD-trees**   | Effective for low-dimensional data (e.g., 2D, 3D).                         | Less efficient for higher dimensions or complex shapes.       |
 | **Hextrees**   | Uniform coverage of the earth, supports multi-resolution queries, scalable. | Limited support for non-hexagonal geometries.                 |
+
+## What It Looks Like
+
+When working with Hextrees, each cell has a unique identifier representing a hexagonal zone. For example:
+
+- **Cell ID**: `spbj842j22` (a unique identifier for a specific hexagon on the globe).
+
+Here’s an example visualization of hexagonal cells:
+
+![img-description](/assets/img/geospatial/hextree.png)
+_Hextree_
 
 ## Results and Benefits
 
