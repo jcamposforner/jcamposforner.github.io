@@ -53,6 +53,9 @@ Geospatial indexes often use tree-based structures, such as:
 - **Hextrees**: Use hexagonal grids to divide the earth into cells of varying
   resolution, providing a highly efficient and scalable indexing system.
 
+![img-description](/assets/img/geospatial/hextree.png)
+_Hextree_
+
 These structures allow the system to perform spatial queries, such as:
 
 - Find all polygons containing this point.
