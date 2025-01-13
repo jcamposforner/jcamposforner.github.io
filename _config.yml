@@ -32,8 +32,8 @@ social:
   email: jcamposforner@gmail.com # change to your email address
   links:
     # The first element serves as the copyright owner's link
-    - https://github.com/username # change to your GitHub homepage
     - https://www.linkedin.com/in/jesus-campos-forner # change to your LinkedIn profile
+    - https://github.com/jcamposforner # change to your GitHub homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
     # - https://www.linkedin.com/in/username
