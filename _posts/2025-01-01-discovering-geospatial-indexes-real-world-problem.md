@@ -1,7 +1,8 @@
 ---
 title: "Overcoming Bottleneck: Discovering Geospatial Index"
-description: "Learn how geospatial indexes transformed the performance of a real-time location-based application, solving critical scalability challenges with an elegant data structure."
+description: "Learn how geospatial indexes transformed the performance of a real-time location-based application, solving critical scalability challenges with an elegant data structure"
 date: 2025-01-01 18:00:00 +0000
+last_modified_at: 2025-01-01 18:00:00 +0000
 categories: [ Geospatial, Hextree ]
 tags: [ Geospatial, Hextree ]
 ---
@@ -102,6 +103,10 @@ Geospatial indexes are powerful tools for optimizing spatial queries, if you are
 with complex spatial data,
 consider exploring geospatial indexes to unlock better performance and scalability.
 
-### Coming Up Next
+## Coming Up Next
 
 Stay tuned for the next post in this series: [**Building a Geospatial Index from Scratch: First Steps**](/posts/building-geospatial-index-first-steps/).
+
+## Read More
+
+Check out the previous posts about [**Geospatial Indexes**](/categories/geospatial/).
