@@ -8,8 +8,6 @@ tags: [ Geospatial, Hextree, Algorithms, Data Structure ]
 math: true
 ---
 
-Creating a geospatial index is a fascinating journey into the world of spatial data structures.
-
 In this post, we’ll explore the foundational steps to build a geospatial index based on a hexagonal grid. While we won't
 deep into
 code, I'll show the core ideas and steps to get you started.
