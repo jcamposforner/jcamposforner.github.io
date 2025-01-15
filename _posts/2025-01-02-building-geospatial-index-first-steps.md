@@ -43,7 +43,7 @@ For the next resolution:
 - **Subdivide the Hexagon:** Each hexagon at the current level is divided into 7 smaller hexagons.
 - **Spacing:** To ensure the smaller hexagons fit perfectly within their parent, their spacing is derived using the \\(
   \\sqrt{7}\\)
-- **Rotation:** The smaller hexagons are rotated by approximately 19 degrees for precise alignment.
+- **Rotation:** The smaller hexagons are rotated by approximately \\(19^\\circ\\) for precise alignment.
 
 ### 3. **Generating a Hexagon**
 
