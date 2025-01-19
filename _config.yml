@@ -101,6 +101,34 @@ social_preview_image: # string, local or CORS resources
 # boolean type, the global switch for TOC in posts.
 toc: true
 
+projects:
+  - title: Hextree
+    description: "An efficient implementation of a spatial tree for dividing geographic areas in Rust."
+    tags: [Geospatial, Hextree, Rust]
+    image: "/assets/img/geospatial/hextree.png"
+    post: "hextree-project"
+  - title: GPS Application
+    description: "A real-time GPS application optimized for route optimization and geofencing."
+    tags: [Geospatial, Hextree, GPS, Rust, Algorithms, Data Structure]
+  - title: Geocoder Implementation
+    description: "A high-performance geocoding engine written in Kotlin, supporting reverse and forward geocoding."
+    tags: [Geospatial, Kotlin, Geocoding]
+  - title: Inverse IP Geocoding
+    description: "An inverse geocoding system designed to map IPs to geographic locations using Kotlin."
+    tags: [Geospatial, Kotlin, IP-Geocoding]
+  - title: Real-Time Transit Network
+    description: "A platform for managing and optimizing public transit networks in real time using event-driven architecture."
+    tags: [Graph, Microservices, Real-Time, Rust]
+  - title: Location Matching Engine
+    description: "An algorithm to match user-reported locations to points of interest using clean architecture principles."
+    tags: [Geospatial, Algorithms, Clean Architecture, Kotlin]
+  - title: Dynamic Routing System
+    description: "A system for calculating and updating optimal routes for delivery vehicles in real-time using machine learning."
+    tags: [Geospatial, Routing, Rust]
+  - title: Geofencing API
+    description: "A robust API for detecting entry and exit events in predefined geographic zones."
+    tags: [Geospatial, API, Geofencing, Rust]
+
 comments:
   # Global switch for the post-comment system. Keeping it empty means disabled.
   provider: utterances
@@ -139,7 +167,7 @@ pwa:
     # Usually its value is the `baseurl` of another website that
     # shares the same domain name as the current website.
     deny_paths:
-      # - "/example"  # URLs match `<SITE_URL>/example/*` will not be cached by the PWA
+    # - "/example"  # URLs match `<SITE_URL>/example/*` will not be cached by the PWA
 
 paginate: 10
 
@@ -197,7 +225,7 @@ compress_html:
   profile: false
   blanklines: false
   ignore:
-    envs: [development]
+    envs: [ development ]
 
 exclude:
   - "*.gem"
@@ -211,7 +239,7 @@ exclude:
   - "package*.json"
 
 jekyll-archives:
-  enabled: [categories, tags]
+  enabled: [ categories, tags ]
   layouts:
     category: category
     tag: tag
