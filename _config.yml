@@ -102,7 +102,7 @@ social_preview_image: # string, local or CORS resources
 toc: true
 
 projects:
-  - title: Hextree
+  - title: "Hextree: Efficient Geospatial Indexing in Rust"
     description: "An efficient implementation of a spatial tree for dividing geographic areas in Rust."
     tags: [Geospatial, Hextree, Rust]
     image: "/assets/img/geospatial/hextree.png"
