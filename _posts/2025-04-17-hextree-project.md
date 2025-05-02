@@ -48,7 +48,7 @@ _Hexagon of resolution 10_
 - **Custom iterators:** Created for efficient traversal of hex neighborhoods
 - **Binary space partitioning:** Applied for dividing geographic space at multiple resolutions
 - **Spatial indexing trees:** Core data structure supporting the entire library's functionality
-- **Shoelace algorithm:** Implemented for accurate polygon area calculation and point-in-polygon testing
+- **Sutherland Hodgman algorithm:** Implemented for accurate polygon area calculation and point-in-polygon testing
 
 ![img-description](/assets/img/geospatial/polygon-clipping.png)
 _Polygon Clipping_
