@@ -188,6 +188,8 @@ _We purge "de" and "de la"_
 
 ```
 1. ["Avenida"(RoadType), "Reina María Cristina"(EuropeanStreetName), "34"(HouseNumber), next="Spain"] - Total: 3.0
+2. ["Avenida"(RoadType), "Reina María"(EuropeanStreetName), next="34"] - Total: 1.6
+3. ["Avenida"(RoadType), "Reina"(EuropeanStreetName), next="Cristina"] - Total: 1.5. 
 ```
 
 **Iteration 4: Section transition**
@@ -202,7 +204,9 @@ Spain -> Country (score: 1.0)
 **TopK after iteration 4:**
 
 ```
-["Avenida"(RoadType), "Reina María Cristina"(EuropeanStreetName), "34"(HouseNumber), "Spain"(Country), next="Barcelona"] - Total: 4.0
+1. ["Avenida"(RoadType), "Reina María Cristina"(EuropeanStreetName), "34"(HouseNumber), "Spain"(Country), next="Barcelona"] - Total: 4.0
+2. ["Avenida"(RoadType), "Reina María"(EuropeanStreetName), "34"(HouseNumber) next="Spain"] - Total: 2.6
+3. ["Avenida"(RoadType), "Reina"(EuropeanStreetName), next="34"] - Total: 1.5. 
 ```
 
 **Iteration 5: Section transition**
@@ -217,7 +221,9 @@ Barcelona -> City (score: 1.0)
 **TopK after iteration 5:**
 
 ```
-["Avenida"(RoadType), "Reina María Cristina"(EuropeanStreetName), "34"(HouseNumber), "Spain"(Country), "Barcelona"(City), next="08004"] - Total: 5.0
+1. ["Avenida"(RoadType), "Reina María Cristina"(EuropeanStreetName), "34"(HouseNumber), "Spain"(Country), "Barcelona"(City), next="08004"] - Total: 5.0
+2. ["Avenida"(RoadType), "Reina María"(EuropeanStreetName), "34"(HouseNumber), "Spain"(Country), next="Barcelona"] - Total: 3.6
+... lower score solutions but keep adding into it for disambiguate
 ```
 
 **Iteration 6: Section transition**
@@ -233,6 +239,7 @@ Expanding ["Avenida"(RoadType), "Reina María Cristina"(EuropeanStreetName), "34
 
 ```
 ["Avenida"(RoadType), "Reina María Cristina"(EuropeanStreetName), "34"(HouseNumber), "Spain"(Country), "Barcelona"(City), "08004"(ZipCode), next=""] - Total: 6.0
+... lower score solutions but keep adding into it for disambiguate
 ```
 
 **Final Solution:**
