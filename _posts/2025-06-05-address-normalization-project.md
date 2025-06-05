@@ -1,6 +1,6 @@
 ---
-title: "Building an Address Normalization"
-description: "Building Production-Ready Address Normalization: Lessons from Processing 50M+ Addresses"
+title: "Address Parsing at Scale"
+description: "Address Parsing at Scale: How Graph Algorithms Beat Regex and ML"
 categories: [ Geospatial, Address Normalization, Geocoder ]
 tags: [ Geospatial, Address Normalization, Geocoder ]
 hidden: true
@@ -25,8 +25,7 @@ A regex that handles **"C/ Mayor 23"** breaks on **"Avenida de la Constitución 
 **Machine learning models** would likely be **too slow** for real-time processing and require constant retraining when
 new address formats appear. Plus, they're overkill for what is fundamentally a structured parsing problem.
 
-What actually worked was a **graph-based tokenizer** with fuzzy matching, fast enough for production and flexible enough
-to handle addresses.
+What actually worked was a **graph-based tokenizer** with fuzzy matching.
 
 ## Architecture Overview
 
