@@ -252,3 +252,7 @@ Expanding ["Avenida"(RoadType), "Reina María Cristina"(EuropeanStreetName), "34
 - 08004 -> ZipCode (1.0)
 
 **Total score: 6.0 ( optimal solution )**
+
+### Handling Ambiguous Addresses
+
+## Performance Lessons Learned
