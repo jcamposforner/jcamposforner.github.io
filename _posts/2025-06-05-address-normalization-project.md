@@ -33,13 +33,14 @@ What actually worked was a **graph-based tokenizer** with fuzzy matching.
 
 Instead of treating addresses as strings, we build a **connected graph** of relationships between tokens.
 
-[IMAGE: Architecture diagram showing tokenization flow: Input String -> Section Splitter -> Word Tokenizer -> Phrase Generator -> Relationship Graph]
-
 The tokenizer creates three levels:
 
 - **Sections**: Split by commas and known delimiters
 - **Words**: Individual tokens within sections
 - **Phrases**: Words permutations (max 5 words)
+
+![normalization](/assets/img/address/normalization.png)
+_Tokenization flow_
 
 The graph connections:
 
@@ -55,19 +56,19 @@ enum class Relationship {
 }
 ```
 
-[IMAGE: Graph visualization]
-
 This connected structure helps disambiguate tokens.
 
 For example, **"España"** could be part of "**Calle de España (street name), España (country)**".
 
-The graph relationships help the classifier make better decisions.
+![graph-tokens](/assets/img/address/graph-tokens.png)
+_The graph relationships help the classifier make better decisions._
 
 ### 2. Phrase Generation with Sliding Windows
 
 The phrase generator creates all possible combinations up to 5 words using a sliding window approach:
 
-[IMAGE: Diagram showing how an address generates phrases: "Avenida", "de", "América", "Avenida de", "de América", "Avenida de América" with their relationships]
+![phrase-diagram](/assets/img/address/phrase-diagram.png)
+_Phrase generation_
 
 Key design decisions:
 
@@ -89,43 +90,49 @@ confidence score from **0.0** to **1.0**.
    23-25", "s/n", "23B"
 7. **EuropeanStreetNameClassifier**: Uses abbreviation expansion (**"C/" -> "Calle", "Avda" -> "Avenida"**)
 
-[IMAGE: Diagram showing classification pipeline]
+![classifiers-pipeline](/assets/img/address/classifiers-queue.png)
+_Classification pipeline_
 
 The ordering is **critical** to ensure that tokens identified with high confidence by early classifiers **influence**
 later classification decisions.
 
-For example, if **RoadTypeClassifier** identifies **"Avenida" with 0.95 confidence**, the **EuropeanStreetNameClassifier
-** knows the following tokens are likely a **street name**.
+For example, if **RoadTypeClassifier** identifies **"Avenida" with 0.95 confidence**,
+the **EuropeanStreetNameClassifier** knows the following tokens are likely a **street name**.
 
 ### 4. Solving with BeamSearch and TopK structure
 
 This is where the magic happens. The solver explores multiple parsing paths simultaneously but keeps only the most
 promising candidates using a **BeamSearch** algorithm with **TopK pruning**.
 
-[IMAGE: BeamSearch exploring different solutions with confidence scores and top-k candidates at each step]
+![img-description](/assets/gif/algorithm/beamsearch.gif)
+_BeamSearch_
 
 How the solving process works:
 
-1. **TopK**: Maintains only the best candidates at any time. This is **crucial**
+1. **TopK**: Maintains only the best candidates at any time using a **min-heap**. This is **crucial**
 2. **Iterative Exploration**:
-  - Extracts all current candidates from **TopK**
-  - Updates the best solution seen so far
-  - Expands each candidate
-  - Adds new candidates back to TopK
+
+- Extracts all current candidates from **TopK**
+- Updates the best solution seen so far
+- Expands each candidate
+- Adds new candidates back to TopK
+
 3. **Early Exit**: If any solution reaches the optimal solution (score = 6.0), we return immediately
 4. **Fallback**: We return the best candidate inside **TopK**
 
-[IMAGE: Diagram showing how TopK maintains]
+![img-description](/assets/gif/data-structure/minheap.gif)
+_Min heap used for TopK_
 
 #### Key insights from the BeamSearch implementation:
 
 - **Beam Width = 3**: We keep just 5 candidates.
-- **Best Solution Tracking**: We keep the best solution ensuring we never lose a good solution, even if it's not in the current
+- **Best Solution Tracking**: We keep the best solution ensuring we never lose a good solution, even if it's not in the
+  current
   beam.
 - **Greedy but Smart**: While BeamSearch is inherently greedy, the combination with our heuristic helps to the best
   solutions.
 
-#### Example 
+#### Example
 
 Let's see how BeamSearch works the following address: **Avenida de la Reina María Cristina 34, Spain, Barcelona, 08004**
 
@@ -136,9 +143,11 @@ Let's see how BeamSearch works the following address: **Avenida de la Reina Mar�
 ```
 
 **TopK after iteration 1:**
+
 ```
 1. ["Avenida"(RoadType: 1.0), next="de"] - Total: 1.0
 ```
+
 ##### Iteration 2: Expanding top candidates
 
 Expanding ["Avenida"(RoadType: 1.0), next="de"]:
@@ -200,7 +209,6 @@ Expanding ["Avenida"(RoadType), "Reina María Cristina"(EuropeanStreetName), "34
 Spain -> Country (score: 1.0)
 ```
 
-
 **TopK after iteration 4:**
 
 ```
@@ -217,7 +225,6 @@ Expanding ["Avenida"(RoadType), "Reina María Cristina"(EuropeanStreetName), "34
 Barcelona -> City (score: 1.0)
 ```
 
-
 **TopK after iteration 5:**
 
 ```
@@ -233,7 +240,6 @@ Expanding ["Avenida"(RoadType), "Reina María Cristina"(EuropeanStreetName), "34
 ```
 08004 -> ZipCode (score: 1.0)
 ```
-
 
 **TopK after iteration 6:**
 
