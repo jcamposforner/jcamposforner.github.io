@@ -125,7 +125,7 @@ _Min heap used for TopK_
 
 #### Key insights from the BeamSearch implementation:
 
-- **Beam Width = 3**: We keep just 5 candidates.
+- **Beam Width = 3**: We keep just 3 candidates.
 - **Best Solution Tracking**: We keep the best solution ensuring we never lose a good solution, even if it's not in the
   current
   beam.
