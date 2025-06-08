@@ -112,10 +112,10 @@ How the solving process works:
 1. **TopK**: Maintains only the best candidates at any time using a **min-heap**. This is **crucial**
 2. **Iterative Exploration**:
 
-- Extracts all current candidates from **TopK**
-- Updates the best solution seen so far
-- Expands each candidate
-- Adds new candidates back to TopK
+	- Extracts all current candidates from **TopK**
+	- Updates the best solution seen so far
+	- Expands each candidate
+	- Adds new candidates back to TopK
 
 3. **Early Exit**: If any solution reaches the optimal solution (score = 6.0), we return immediately
 4. **Fallback**: We return the best candidate inside **TopK**
