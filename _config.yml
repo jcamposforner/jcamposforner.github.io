@@ -107,6 +107,11 @@ projects:
     tags: [Geospatial, Hextree, Rust]
     image: "/assets/img/geospatial/hextree.png"
     post: "hextree-project"
+  - title: "Address Parsing"
+    description: "Graph-based address normalization system that handles real-world parsing ambiguities at scale without regex or ML overhead."
+    tags: [Geospatial, GPS, Algorithms, Data Structure, Address Normalization, Geocoder]
+    image: "/assets/img/address/graph-tokens.png"
+    post: "address-normalization-project"
   - title: GPS Application
     description: "A real-time GPS application optimized for route optimization and geofencing."
     tags: [Geospatial, Hextree, GPS, Rust, Algorithms, Data Structure]

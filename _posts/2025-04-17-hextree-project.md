@@ -3,7 +3,7 @@ title: "Hextree: Efficient Geospatial Indexing in Rust"
 description: "An efficient implementation of a spatial tree for dividing geographic areas in Rust."
 categories: [ Geospatial, Hextree ]
 tags: [ Geospatial, Hextree ]
-hidden: true
+hidden: false
 ---
 
 ## Project Summary

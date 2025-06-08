@@ -3,7 +3,7 @@ title: "Address Parsing at Scale"
 description: "Address Parsing at Scale: How Graph Algorithms Beat Regex and ML"
 categories: [ Geospatial, Address Normalization, Geocoder ]
 tags: [ Geospatial, Address Normalization, Geocoder ]
-hidden: true
+hidden: false
 ---
 
 Address normalization is one of those problems that seems simple until you hit the edge cases.
@@ -261,4 +261,67 @@ Expanding ["Avenida"(RoadType), "Reina María Cristina"(EuropeanStreetName), "34
 
 ### Handling Ambiguous Addresses
 
+Ambiguous addresses are the hard test for any normalization system. They're addresses where the same tokens can
+represent multiple different classifications.
+
+Example ["Avenida de España, Mexico"]:
+
+This simple address exposes the core ambiguity problem. **"España"** could be:
+
+- Part of the street name: "Avenida de España"
+- A location reference after the street: "Avenida de" + "España" (country)
+- With **"Mexico"** potentially being a country
+
+The **BeamSearch** helps to mitigate the ambiguity exploring all paths possible paths:
+
+```
+Path 1: ["Avenida"(StreetName), "España"(Country), "Mexico"(Unkown)] - Score: 1.6
+Path 2: ["Avenida"(RoadType), "España"(StreetName), "Mexico"(Country)] - Score: 2.8
+```
+
+BeamSearch selects the highest scoring path (2.8), which correctly identifies the street structure with country
+context. This greedy approach works because our classifiers are tuned to assign higher confidence to common patterns.
+
 ## Performance Lessons Learned
+
+Through extensive benchmarking and optimization of the address normalization system, several critical performance
+insights emerged:
+
+### Regex Performance Bottlenecks
+
+Regular expressions proved to be a significant performance bottleneck for parsing. While regex
+offers flexibility and readability, the performance penalty becomes unacceptable when processing millions of
+addresses.
+
+
+<div style="text-align: center;">
+<b>Conditionals has a huge performance improvements over regex.</b>
+</div>
+
+### Benchmarking with real data
+
+Synthetic benchmarks failed to capture real-world performance characteristics.
+
+Only by testing with actual edge cases, malformed inputs, and international variations.
+
+<div style="text-align: center;">
+<b>Always benchmark with representative datasets.</b>
+</div>
+
+### BitMasking for Classification States
+
+Implementing bit masks to track already classified components provided a performance boost. Instead of
+maintaining a **HashSets** to check if an address components had already been
+identified, a **single integer** with bit operations reduced memory footprint and improved lookup performance.
+
+This technique proved especially valuable when solving **ambiguous** addresses where the same token could match multiple
+classification types.
+
+This prevents duplicate classifications and speeds up the "**is this classification slot already taken?**" check that
+happens constantly during address solver.
+
+![bit-mask](/assets/img/address/mask.png)
+_Bit & operation_
+
+The key takeaway: optimizations matter at scale. What seems negligible when processing single addresses compounds
+dramatically when normalizing millions of records.
