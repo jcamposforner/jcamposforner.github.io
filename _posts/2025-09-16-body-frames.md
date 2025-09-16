@@ -109,7 +109,7 @@ A point in 3D space is expressed with three values:
 - **Theta (θ)**: Elevation angle
 - **Phi (ϕ)**: Azimuth angle
 
-**_Theta and Phi differ in conventions; the ones shown in the earlier functions follow the physics convention_**
+**_Theta and Phi differ in conventions, the ones shown in the earlier functions follow the physics convention_**
 
 This is exactly how sensors like radars, LiDARs, and cameras describe what they **see**
 
