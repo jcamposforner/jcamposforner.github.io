@@ -225,7 +225,7 @@ analysis, and more.
 
 ## Coming Up Next
 
-Stay tuned for the next post in this series: [**Data Structures and Geometry: The Foundation of a Geospatial Index**](/posts/data-structures-geometry-geospatial-index/).
+Stay tuned for the next post in this series: **Data Structures and Geometry: The Foundation of a Geospatial Index**.
 
 ## Read More
 
