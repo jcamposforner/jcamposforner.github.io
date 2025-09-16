@@ -194,8 +194,7 @@ from spherical coordinates to Cartesian coordinates in **Observer 2** body frame
 Finally, using the previously defined rotation and translation, we transform the target coordinates from **Observer 2**
 frame to **Observer 1** frame. This gives **Observer 1** the same target location in their own coordinate system.
 
-For the reverse operation, from Observer 1’s FRD frame to Observer 2’s FRD frame, we need to **invert the transformation
-**:
+For the reverse operation, from Observer 1’s FRD frame to Observer 2’s FRD frame, we need to **invert the transformation**:
 
 $$
 \mathbf{T}_{\text{FRD2←FRD1}} = \mathbf{T}_{\text{FRD1←FRD2}}^{-1}
