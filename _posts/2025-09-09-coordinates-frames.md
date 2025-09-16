@@ -8,7 +8,6 @@ hidden: false
 
 ## Why a Point Means Nothing Without Context
 
-
 ![point-position](/assets/img/navigation/coordinates-frames/point-coordinates-frame.png)
 <center><em>What does it mean to you?</em></center>
 
@@ -22,11 +21,13 @@ Those three numbers are meaningless until we specify **which coordinate frame th
 
 ## What Exactly Is Navigation Trying To Tell Us?
 
-Navigation describes position, orientation, heading, and motion of objects. An object may be a GNSS antenna or an INS, it may be a vehicle, satellite, a person, animal...
+Navigation describes position, orientation, heading, and motion of objects. An object may be a GNSS antenna or an INS,
+it may be a vehicle, satellite, a person, animal...
 
 But here's the first challenge: **Where exactly on that object are we measuring?**
 
-To describe the position and motion of an object, a specific point on that object must be selected. This is known as the origin of that object. It may be the center of mass of that object or an arbitrarily convenient point, such as a corner.
+To describe the position and motion of an object, a specific point on that object must be selected. This is known as the
+origin of that object. It may be the center of mass of that object or an arbitrarily convenient point, such as a corner.
 
 And another challenge: **How do we describe which way it's facing?**
 
@@ -34,7 +35,9 @@ To describe the orientation and angular motion of an object, a set of three orth
 
 ## The Fundamental Problem: Everything Is Relative
 
-Position, orientation and motion of an object are meaningless on their own. Some reference is needed, relative to which the object may be described. The reference is also defined by an origin and a set of axes. Suitable origins include the center of the Earth, the center of the solar system, or local landmarks.
+Position, orientation and motion of an object are meaningless on their own. Some reference is needed, relative to which
+the object may be described. The reference is also defined by an origin and a set of axes. Suitable origins include the
+center of the Earth, the center of the solar system, or local landmarks.
 
 If I tell you "I'm 5 meters away,", **"5 meters away from what?"**
 
@@ -62,14 +65,17 @@ Same numbers, completely different reality.
 
 ## Navigation Language
 
-**A bearing** is the angle within the horizontal plane between the line of sight to an object and a known direction, usually geodetic north. Also called azimuth when the angle is based on the geodetic n
-orth.
+**A bearing** is the angle within the horizontal plane between the line of sight to an object and a known direction,
+usually geodetic north. Also called azimuth when the angle is based on the geodetic north.
 
 **Attitude** describes the orientation of the axes of one coordinate frame with respect to another.
 
 **Rotation** describes how attitude changes over time, measured as angular velocities around each axis.
 
 **Landmarks** serve as reference points with known positions that help establish local coordinate frames.
+
+![attitude](/assets/img/navigation/coordinates-frames/attitude.png)
+<center><em>Attitude</em></center>
 
 ## Navigation problems involves at least two coordinate frames
 
@@ -89,21 +95,28 @@ The reality: **Navigation is about translation.** We need multiple frames and th
 
 ## The Mathematical Foundation: How Frames Actually Work
 
-
 ![right-hand-convention](/assets/img/navigation/coordinates-frames/right-hand-rule.jpeg)
 <center><em>Right-handed Convention</em></center>
 <br/>
 
-The coordinate frame has 6 degrees of freedom. These are the position of the origin **o** and the orientation of the axes, x, y and z.
+The coordinate frame has 6 degrees of freedom. These are the position of the origin **o** and the orientation of the
+axes, x, y and z.
 
-In the right-handed convention, the x, y and z axes are always oriented such that if the thumb is the x axis, the first finger is the y axis and the second finger is the z axis. The opposite convention is left-handed convention that is rarely used. All frames considered in these posts are both orthogonal and follow the right-handed convention.
+In the right-handed convention, the x, y and z axes are always oriented such that if the thumb is the x axis, the first
+finger is the y axis and the second finger is the z axis. The opposite convention is left-handed convention that is
+rarely used. All frames considered in these posts are both orthogonal and follow the right-handed convention.
 
-Here's the key insight: **Any navigation problem involves at least two coordinate frames.** These are the object frame, describing the body whose position and orientation is desired, and the reference frame, describing a known body, such as the Earth, relative to which the object position and orientation is described. However, many navigation problems need more than one reference frame, for example, inertial space.
+Here's the key insight: **Any navigation problem involves at least two coordinate frames.** These are the object frame,
+describing the body whose position and orientation is desired, and the reference frame, describing a known body, such as
+the Earth, relative to which the object position and orientation is described. However, many navigation problems need
+more than one reference frame, for example, inertial space.
 
 ## So What's Next?
 
-Now you understand why that simple **P(10, 0, 0)** caused so much confusion. Every number in navigation is meaningless without its frame of reference.
+Now you understand why that simple **P(10, 0, 0)** caused so much confusion. Every number in navigation is meaningless
+without its frame of reference.
 
 But which frames should you actually use? And how do you translate between them?
 
-**Next up: We'll learn about Body Frame (FRD)**, the coordinate system closest to your object and the way onboard sensors sees the world around them.
+**Next up: We'll learn about [Body Frame (FRD)](/posts/body-frames/){:target="_blank"}**, the coordinate system closest to your object and the way onboard
+sensors sees the world around them.
