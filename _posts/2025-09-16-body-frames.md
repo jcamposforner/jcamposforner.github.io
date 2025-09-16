@@ -71,7 +71,7 @@ but one may feel more intuitive for specific applications._**
 
 ## Describing Body Frame Orientation: Euler angles
 
-Euler angles are a general way to describe orientation using three sequential rotations. In practice, navigation systems
+To describe orientation in a 3D plane we need to use three rotations. Navigation systems
 typically use the Tait-Bryan convention, better known as roll-pitch-yaw.
 
 ![yaw-pitch-roll](/assets/img/navigation/body-frames/yaw-pitch-roll.png)
