@@ -1,7 +1,7 @@
 ---
 title: "Navigation Systems: Why Body Frames Matter"
 description: "A point in space only has meaning when expressed in a reference frame. Learn why body frames like RFU or FRD are essential for describing positions, orientations, and observations from multiple observers."
-categories: [ Geospatial, Navigation, Coordinate Frames, Body Frame ]
+categories: [ Navigation, Body Frame, Coordinate Frames ]
 tags: [ Navigation, Coordinate Systems, Reference Frames, Body Frame, NED, Orientation, Position, Geospatial ]
 hidden: false
 math: true
@@ -194,7 +194,8 @@ from spherical coordinates to Cartesian coordinates in **Observer 2** body frame
 Finally, using the previously defined rotation and translation, we transform the target coordinates from **Observer 2**
 frame to **Observer 1** frame. This gives **Observer 1** the same target location in their own coordinate system.
 
-For the reverse operation, from Observer 1’s FRD frame to Observer 2’s FRD frame, we need to **invert the transformation**:
+For the reverse operation, from Observer 1’s FRD frame to Observer 2’s FRD frame, we need to **invert the transformation
+**:
 
 $$
 \mathbf{T}_{\text{FRD2←FRD1}} = \mathbf{T}_{\text{FRD1←FRD2}}^{-1}
@@ -224,8 +225,10 @@ Whenever multiple observers or sensors need to share information, the body frame
 
 By now you have seen why **left, right, up, down** are not universal, they only make sense once tied to a body frame.
 
-But navigation doesn't stop there. To interact with the real world, we also need global or local reference frames that
-everyone can agree on.
+But navigation doesn't stop there. To interact with the real world, we also need to understand how the Earth itself is
+represented.
 
-**Next up: We'll learn about local reference frames (NED, ENU)** the bridge between your moving body frame and the Earth
-itself.
+**Next up: We'll explore [geodetic coordinates and how the Earth is
+modeled](/posts/earth-coordinates/#converting-between-coordinate-systems){:target="_blank"}** the foundation for
+connecting local
+movement to the planet.

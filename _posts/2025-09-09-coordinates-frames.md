@@ -1,7 +1,7 @@
 ---
 title: "Navigation Systems: Why Coordinate Frames Matter"
 description: "A simple point like (10,0,0) means nothing until we define its coordinate frame. Learn why navigation always needs reference frames, and how objects are described relative to them."
-categories: [ Geospatial, Navigation, Coordinate Frames, ]
+categories: [ Navigation, Coordinate Frames ]
 tags: [ Navigation, Coordinate Systems, Reference Frames, Body Frame, NED, Orientation, Position, Geospatial ]
 hidden: false
 ---
