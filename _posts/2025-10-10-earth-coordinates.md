@@ -350,7 +350,33 @@ $$
 These formulas take into account the Earth’s flattening and give precise Cartesian coordinates for any point on or above
 the ellipsoid.
 
-![wgs84-ecef-conversion](/assets/img/navigation/geodetic/wgs84-to-ecef.png)
+```rust
+impl Coordinate<Wgs84> {
+    pub fn new(
+        latitude: Latitude,
+        longitude: Longitude,
+        altitude: Altitude,
+    ) -> Self {
+        Self { inner: Wgs84::new(latitude, longitude, altitude) }
+    }
+
+    pub fn to_ecef(&self) -> Coordinate<Ecef> {
+        let lat_phi = self.latitude.get::<radian>();
+        let lon_lambda = self.longitude.get::<radian>();
+        let height_h = self.altitude.get::<meter>();
+
+        let cot_2_phi = 1. / lat_phi.tan().powi(2);
+        let n_phi = earth_constants::SEMI_MAJOR_AXIS / (1. - earth_constants::ECCENTRICITY_SQ / (1. + cot_2_phi)).sqrt();
+
+        let x = (n_phi + height_h) * lat_phi.cos() * lon_lambda.cos();
+        let y = (n_phi + height_h) * lat_phi.cos() * lon_lambda.sin();
+        let z = ((1. - earth_constants::ECCENTRICITY_SQ) * n_phi + height_h) * lat_phi.sin();
+
+        Coordinate::<Ecef>::new(x, y, z)
+    }
+}
+```
+
 <p style="text-align: center;">
   <a href="https://en.wikipedia.org/wiki/Geographic_coordinate_conversion#From_geodetic_to_ECEF_coordinates" target="_blank">
     <em>More details on geodetic &lt;-&gt; ECEF conversion</em>
@@ -369,9 +395,57 @@ One commonly used algorithm is that developed by **Chanfang Shu** and **Fei Li**
 You can read the full paper here:
 [View PDF](/assets/pdf/geodetic/an_iterative_algorithm_to_compute_geodet.pdf){:target="_blank"}
 
-![ecef-wgs84-lon-conversion](/assets/img/navigation/geodetic/ecef-wgs84-lon.png)
+```rust
+impl Coordinate<Ecef> {
+    pub fn to_wgs84(&self) -> Coordinate<Wgs84> {
+        let lon = self.point.y.atan2(self.point.x);
 
-![ecef-wgs84-conversion](/assets/img/navigation/geodetic/ecef-to-wgs84.png)
+        let a = earth_constants::SEMI_MAJOR_AXIS;
+        let b = earth_constants::SEMI_MINOR_AXIS;
+        let a2 = a.powi(2);
+        let b2 = b.powi(2);
+        let ab = a * b;
+        let z2 = self.point.z.powi(2);
+        let x2y2 = self.point.x.powi(2) + self.point.y.powi(2);
+        let r2 = x2y2;
+        let r = x2y2.sqrt();
+        let bigr2 = x2y2 + z2;
+
+        let k0 = (((a2 * z2 + b2 * r2).sqrt() - ab) * bigr2) / (a2 * z2 + b2 * r2);
+        let mut k = k0;
+        loop {
+            let p = a + b * k;
+            let q = b + a * k;
+            let f_k_value = p.powi(2) * q.powi(2) - r2 * q.powi(2) - z2 * p.powi(2);
+            let f_k_derivative = 2. * (b * p * q.powi(2) + a * p.powi(2) * q - a * r2 * q - b * z2 * p);
+
+            let dk = -f_k_value / f_k_derivative;
+
+            if !dk.is_normal() || dk.abs() < f64::EPSILON {
+                break;
+            }
+
+            k += dk;
+        }
+
+        let p = a + b * k;
+        let q = b + a * k;
+        let lat = ((a * p * self.point.z) / (b * q * r)).atan();
+        let altitude = k * ((b2 * r2 / p.powi(2)) + (a2 * z2 / q.powi(2))).sqrt();
+
+        Coordinate::<Wgs84>::new(
+            Latitude::new(Angle::new::<radian>(lat))
+                .expect("latitude is not in a valid range"),
+            Longitude::new(Angle::new::<radian>(lon))
+                .expect("longitude is not in a valid range"),
+            Altitude::new(Length::new::<meter>(altitude)),
+        )
+    }
+}
+```
+
+[//]: # (![ecef-wgs84-conversion]&#40;/assets/img/navigation/geodetic/ecef-to-wgs84.png&#41;)
+[//]: # (![ecef-wgs84-lon-conversion]&#40;/assets/img/navigation/geodetic/ecef-wgs84-lon.png&#41;)
 
 ### Transforming ECI to ECEF
 
@@ -408,7 +482,40 @@ $$
 \mathbf{r}_{\text{ECI}}
 $$
 
-![eci-ecef-conversion](/assets/img/navigation/geodetic/eci-to-ecef.png)
+```rust
+
+const EARTH_ROTATION_RATE: f64 = 360.98564736629;
+const ERA_J2000: f64 = 280.46061837;
+const SECONDS_PER_DAY: f64 = 86_400.0;
+const J2000_UNIX_TIMESTAMP: f64 = 946728000.0;
+const FULL_CIRCLE_DEGREES: f64 = 360.0;
+
+fn calculate_earth_rotation_angle(time: &DateTime<Utc>) -> Angle {
+    let days_since_j2000 = (time.timestamp() as f64 - J2000_UNIX_TIMESTAMP) / SECONDS_PER_DAY;
+    let theta = ERA_J2000 + EARTH_ROTATION_RATE * days_since_j2000;
+
+    Angle::new::<radian>(theta.rem_euclid(FULL_CIRCLE_DEGREES).to_radians())
+}
+
+impl Coordinate<Eci> {
+    pub fn to_ecef(&self, time: &DateTime<Utc>) -> Coordinate<Ecef> {
+        let earth_rotation_angle = calculate_earth_rotation_angle(time);
+        let earth_rotation_angle_radians = -earth_rotation_angle.get::<radian>();
+
+        let cos_theta = earth_rotation_angle_radians.cos();
+        let sin_theta = earth_rotation_angle_radians.sin();
+
+        let rotation_matrix = Matrix3::new(
+            cos_theta, sin_theta, 0.0,
+            -sin_theta, cos_theta, 0.0,
+            0.0, 0.0, 1.0,
+        );
+
+        let rotated_point = rotation_matrix * self.point;
+        Coordinate::<Ecef>::from_point(rotated_point)
+    }
+}
+```
 
 <img src="/assets/img/navigation/geodetic/eci_vs_ecef.gif" alt="earth-radius" style="max-width: 600px; width: 450px; height: auto;">
 <center><em>ECEF and ECI axes comparison</em></center>
