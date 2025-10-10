@@ -432,17 +432,18 @@ orientations relative to a specific location on the Earth’s surface.
 
 ## Sources
 
-- [Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems](https://www.amazon.es/Principles-Inertial-Multisensor-Integrated-Navigation/dp/1608070050)
-- [https://www.britannica.com/science/meridian-geography](https://www.britannica.com/science/meridian-geography)
-- [Sidereal time](https://en.wikipedia.org/wiki/Sidereal_time)
-- [Transform ECI to ECEF question](https://space.stackexchange.com/questions/38807/transform-eci-to-ecef)
-- [Polar motion](https://en.wikipedia.org/wiki/Polar_motion)
-- [Astronomical nutation](https://en.wikipedia.org/wiki/Astronomical_nutation)
-- [Axial precession](https://en.wikipedia.org/wiki/Axial_precession)
-- [Coordinate Systems for Modeling](https://es.mathworks.com/help/aeroblks/coordinate-systems-for-modeling.html)
-- [Orbital Coordinate Systems](https://celestrak.org/columns/v02n01/)
-- [Geographic coordinate conversion](https://en.wikipedia.org/wiki/Geographic_coordinate_conversion)
-- [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System)
-- [ECEF](https://en.wikipedia.org/wiki/Earth-centered,_Earth-fixed_coordinate_system)
-- [ECI](https://en.wikipedia.org/wiki/Earth-centered_inertial)
-- [Trilateration](https://en.wikipedia.org/wiki/Trilateration)
+- [Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems](https://www.amazon.es/Principles-Inertial-Multisensor-Integrated-Navigation/dp/1608070050){:target="_blank"}
+- [https://www.britannica.com/science/meridian-geography](https://www.britannica.com/science/meridian-geography){:target="_blank"}
+- [Sidereal time](https://en.wikipedia.org/wiki/Sidereal_time){:target="_blank"}
+- [Transform ECI to ECEF question](https://space.stackexchange.com/questions/38807/transform-eci-to-ecef){:target="_blank"}
+- [Polar motion](https://en.wikipedia.org/wiki/Polar_motion){:target="_blank"}
+- [Astronomical nutation](https://en.wikipedia.org/wiki/Astronomical_nutation){:target="_blank"}
+- [Axial precession](https://en.wikipedia.org/wiki/Axial_precession){:target="_blank"}
+- [Coordinate Systems for Modeling](https://es.mathworks.com/help/aeroblks/coordinate-systems-for-modeling.html){:target="_blank"}
+- [Orbital Coordinate Systems](https://celestrak.org/columns/v02n01/){:target="_blank"}
+- [Geographic coordinate conversion](https://en.wikipedia.org/wiki/Geographic_coordinate_conversion){:target="_blank"}
+- [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System){:target="_blank"}
+- [ECEF](https://en.wikipedia.org/wiki/Earth-centered,_Earth-fixed_coordinate_system){:target="_blank"}
+- [ECI](https://en.wikipedia.org/wiki/Earth-centered_inertial){:target="_blank"}
+- [Trilateration](https://en.wikipedia.org/wiki/Trilateration){:target="_blank"}
+- [An iterative algorithm to compute geodetic coordinates](/assets/pdf/geodetic/an_iterative_algorithm_to_compute_geodet.pdf){:target="_blank"}
