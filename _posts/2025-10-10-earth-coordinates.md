@@ -415,7 +415,7 @@ $$
 
 ---
 
-This is a good approximation, but technically wrong, ECI and ECEF do NOT have the Z axis aligned. They differ by the
+This is a good approximation, but technically wrong, **ECI and ECEF do NOT have the Z axis aligned**. They differ by the
 **precession** and **nutation** of the earth's axis, which changes over time. To be accurate, you need to account for
 these
 effects if not the transformation will be off by kilometers on the surface of the Earth.
