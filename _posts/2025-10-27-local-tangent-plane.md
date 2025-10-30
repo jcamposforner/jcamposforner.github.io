@@ -18,11 +18,12 @@ kilometers. LTPs are widely used in UAV missions, autonomous vehicles, marine op
 ## What Is a Local Tangent Plane?
 
 Local Tangent Planes **(LTP)** describes coordinates relative to a tangent plane of a spatial reference system **at a
-particular point**, within a few kilometers of this origin, the Earth can be approximated as flat. This simplification
-allows easy
-computation of distances, directions, and orientations. The LTP is obtained by projecting global coordinates onto a
-plane tangent to the reference ellipsoid at
-a chosen latitude and longitude.
+particular point**, within a few kilometers of this origin, the Earth can be approximated as flat. Thanks to working
+with
+cartesian coordinates in a flat plane, LTPs simplify the calculations.
+
+To obtained the LTP we need to project global coordinates onto a plane tangent to the reference ellipsoid at a chosen
+latitude and longitude.
 
 ## Types of LTP
 
@@ -149,6 +150,7 @@ error using both formulas is $$3.01 \times 10^{-7}\ \text{m}$$
 | 1,000        | 0.19        |
 | 10,000       | 1.96        |
 | 50,000       | 48.99       |
+
 {: style="margin-left: auto; min-width:100%; margin-right: auto; text-align: center;"}
 
 ```rust
