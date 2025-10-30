@@ -63,8 +63,7 @@ represent these objects.
 
 ### Which One to Use?
 
-They're all measuring distance, just using conventions that match their domain. **NED**
-and **ENU** both describe the same reality, the choice is about which convention makes your calculations more intuitive.
+There are no final answer, you should choose the convention that makes the most sense for your application and domain.
 
 ## LTP Origin
 
