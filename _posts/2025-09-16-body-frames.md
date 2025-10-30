@@ -5,6 +5,7 @@ categories: [ Navigation, Body Frame, Coordinate Frames ]
 tags: [ Navigation, Coordinate Systems, Reference Frames, Body Frame, NED, Orientation, Position, Geospatial ]
 hidden: false
 math: true
+read_complexity: 2
 ---
 
 [Remember our coordinate frame confusion?](/posts/coordinates-frames/){:target="_blank"} It gets even more interesting

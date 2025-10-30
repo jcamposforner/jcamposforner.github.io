@@ -396,6 +396,9 @@ You can read the full paper here:
 [View PDF](/assets/pdf/geodetic/an_iterative_algorithm_to_compute_geodet.pdf){:target="_blank"}
 
 ```rust
+
+const ECEF_TO_WGS84_MAX_ITERATIONS: Range<i32> = 0..20;
+
 impl Coordinate<Ecef> {
     pub fn to_wgs84(&self) -> Coordinate<Wgs84> {
         let lon = self.point.y.atan2(self.point.x);
@@ -413,7 +416,8 @@ impl Coordinate<Ecef> {
 
         let k0 = (((a2 * z2 + b2 * r2).sqrt() - ab) * bigr2) / (a2 * z2 + b2 * r2);
         let mut k = k0;
-        loop {
+
+        for _ in ECEF_TO_WGS84_MAX_ITERATIONS {
             let p = a + b * k;
             let q = b + a * k;
             let f_k_value = p.powi(2) * q.powi(2) - r2 * q.powi(2) - z2 * p.powi(2);

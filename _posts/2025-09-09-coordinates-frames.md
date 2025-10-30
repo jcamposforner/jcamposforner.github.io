@@ -4,6 +4,7 @@ description: "A simple point like (10,0,0) means nothing until we define its coo
 categories: [ Navigation, Coordinate Frames ]
 tags: [ Navigation, Coordinate Systems, Reference Frames, Body Frame, NED, Orientation, Position, Geospatial ]
 hidden: false
+read_complexity: 2
 ---
 
 ## Why a Point Means Nothing Without Context
