@@ -537,8 +537,8 @@ a [proven library](https://spiceypy.readthedocs.io/en/main/){:target="_blank"}.
 
 ## So What's Next?
 
-Now that we understand how to convert between geodetic coordinates and ECEF, we can start working with **local tangent
-planes** like **NED** or **ENU**. These local frames are essential for navigation, as they let us describe positions and
+Now that we understand how to convert between geodetic coordinates and ECEF, we can start working with 
+[**local tangent planes**](/posts/local-tangent-plane/){:target="_blank"} like **NED** or **ENU**. These local frames are essential for navigation, as they let us describe positions and
 orientations relative to a specific location on the Earth’s surface.
 
 ## Sources

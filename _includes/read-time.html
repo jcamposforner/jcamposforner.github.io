@@ -6,7 +6,7 @@
 
 {% assign wpm = page.words_per_minute | default: 180 %}
 {% assign complexity = page.read_complexity | default: 1 %}
-{% assign wpm = wpm | divided_by: complexity %}
+{% assign wpm = wpm | divided_by: complexity | round %}
 {% assign min_time = 1 %}
 
 {% assign read_time = words | divided_by: wpm %}
