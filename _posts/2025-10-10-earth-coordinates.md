@@ -397,7 +397,7 @@ You can read the full paper here:
 
 ```rust
 
-const ECEF_TO_WGS84_MAX_ITERATIONS: Range<i32> = 0..20;
+const ECEF_TO_WGS84_MAX_ITERATIONS: Range<u8> = 0..20;
 
 impl Coordinate<Ecef> {
     pub fn to_wgs84(&self) -> Coordinate<Wgs84> {
