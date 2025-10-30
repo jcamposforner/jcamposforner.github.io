@@ -446,9 +446,8 @@ fn drone_mission() {
 ### Autonomous Vehicle Navigation
 
 A self-driving car navigating a 5km test track doesn't need to worry about Earth's curvature. With a sagitta error of
-only ~0.5m over this distance, the LTP provides millimeter-level precision for lane keeping, obstacle detection, and
-path planning. The car's sensors report positions in meters relative to the track origin, making real-time calculations
-fast enough for split-second decisions.
+only ~0.5m over this distance, the LTP provides precision for lane keeping, obstacle detection, and
+path planning. The car's sensors report positions in meters relative to the track origin.
 
 ### Marine Construction and Dredging
 
