@@ -71,15 +71,14 @@ The **origin** of an LTP is defined by a reference geodetic coordinate. It deter
 touches the Earth's surface.
 
 For example, a **[vehicle’s body frame](/posts/body-frames/){:target="_blank"}** can be expressed relative to an LTP
-origin, allowing its **position and attitude** to be represented in a local reference frame. This makes it easy to
-compute distances, headings, and orientations without dealing with the curvature of the Earth.
+origin, allowing its **position and attitude** to be represented in a local reference frame.
 
 ## LTP Orientation
 
 The orientation of a LTP is defined by how its axes are aligned relative to the Earth’s surface at the origin. Each axis
 pointing to the geodetic directions **(North, East, Up/Down)** at that point.
 
-Imagine the LTP as a flat sheet of paper resting on the Earth at the origin, oriented to match cardinal directions.
+Imagine the LTP as a flat sheet of paper resting on the Earth at the origin.
 
 ![compass](/assets/img/navigation/local-tangent-plane/compass.png)
 
@@ -239,9 +238,8 @@ impl Wgs84 {
 
 ## Converting Between LTP and Global Coordinates
 
-To convert from global coordinates like **WGS84** to **LTP** coordinates, we need to perform a series of
-transformations. First of all we need to convert the global coordinates to **ECEF** coordinates, then we can convert
-from
+To convert from global coordinates like **WGS84** to **LTP** coordinates, we need to convert the global coordinates to 
+**ECEF** coordinates, then we can convert from
 **ECEF** to **LTP**. We have to rotate and translate the coordinates based on the **LTP** origin.
 
 ### ENU rotation matrix
