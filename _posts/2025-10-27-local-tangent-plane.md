@@ -148,7 +148,6 @@ error using both formulas is $$3.01 \times 10^{-7}\ \text{m}$$
 | 1,000        | 0.19        |
 | 10,000       | 1.96        |
 | 50,000       | 48.99       |
-
 {: style="margin-left: auto; min-width:100%; margin-right: auto; text-align: center;"}
 
 ```rust
@@ -238,7 +237,7 @@ impl Wgs84 {
 
 ## Converting Between LTP and Global Coordinates
 
-To convert from global coordinates like **WGS84** to **LTP** coordinates, we need to convert the global coordinates to 
+To convert from global coordinates like **WGS84** to **LTP** coordinates, we need to convert the global coordinates to
 **ECEF** coordinates, then we can convert from
 **ECEF** to **LTP**. We have to rotate and translate the coordinates based on the **LTP** origin.
 
