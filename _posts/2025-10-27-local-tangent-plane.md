@@ -8,6 +8,7 @@ tags: [ Navigation, Coordinate Systems, Reference Frames, Earth Coordinates, Ear
 hidden: false
 math: true
 read_complexity: 1.5
+last_modified_at: 2025-10-31 00:00:00 +0000
 ---
 
 A **Local Tangent Plane (LTP)** approximates the Earth's surface as flat around a specific point. This simplification
