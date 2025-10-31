@@ -148,6 +148,7 @@ error using both formulas is $$3.01 \times 10^{-7}\ \text{m}$$
 | 1,000        | 0.19        |
 | 10,000       | 1.96        |
 | 50,000       | 48.99       |
+
 {: style="margin-left: auto; min-width:100%; margin-right: auto; text-align: center;"}
 
 ```rust
@@ -447,18 +448,21 @@ A self-driving car navigating a 5km test track doesn't need to worry about Earth
 only ~0.5m over this distance, the LTP provides precision for lane keeping, obstacle detection, and
 path planning. The car's sensors report positions in meters relative to the track origin.
 
-### Marine Construction and Dredging
-
-When building a harbor breakwater or dredging a shipping channel, crews work within a few square kilometers. An LTP
-centered on the construction site lets engineers specify exact positions for pilings, measure sediment removal, and
-coordinate multiple vessels—all using simple Cartesian coordinates instead of constantly converting between
-latitude/longitude.
-
 ### Agricultural Drone Mapping
 
 A drone surveying a 2x2 km farm plots its coverage in a NED frame centered on the field corner. The approximately 0.16m
 sagitta error is insignificant compared to the drone's GPS accuracy (±1-5m). This local reference makes it trivial to
 generate orthomosaic maps, calculate crop rows, and identify problem areas without complex geodetic transformations.
+
+And much more:
+
+- **Maritime Navigation**: Ships operating within coastal waters can use LTPs for accurate navigation and collision
+  avoidance.
+- **Surveying and Mapping**: Surveyors can use LTPs for high-precision measurements over small areas.
+- **UAV Operations**: Drones conducting inspections or deliveries in urban environments benefit from LTPs for precise
+  positioning.
+- **Robotics**: Robots operating in warehouses or factories can use LTPs for accurate navigation and task execution.
+- **Mapping areas**:* LTPs are ideal for mapping small regions.
 
 **LTPs excel** when your **operational area is small enough** that Earth's curvature introduces less error than
 your sensors' inherent accuracy.
