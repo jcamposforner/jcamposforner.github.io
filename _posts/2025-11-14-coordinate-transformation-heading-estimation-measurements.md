@@ -35,6 +35,8 @@ observation of a moving car. So we need to take the estimated heading from the f
 observation to calculate the second object position / heading ( Course Over Ground ) because we don't know where the
 first object is pointing the only we know is the direction.
 
+![enu-observation](/assets/img/navigation/coordinates-transformations/enu-multiple-observation.gif)
+
 Line of Sight (LOS)
 
 The vector to get from the observer coordinate to the target coordinate.
