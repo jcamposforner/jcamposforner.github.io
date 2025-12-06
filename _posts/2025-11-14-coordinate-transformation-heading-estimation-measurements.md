@@ -21,7 +21,7 @@ Without transforming the sensors observations into the same frame, we could not:
 
 These coordinates transformations is the gap between what each sensors see and what we need
 to know to navigate, track and making decisions. Without them, each sensor observation is
-isolated in his own frame and we cannot make any of this.
+isolated in his own frame, and we cannot make any of this.
 
 Think of it this way:
 
@@ -34,9 +34,11 @@ where the target really is, how it is moving, or predict its future position.
 
 ## Sensors Measure in Their Own Frame
 
-Every sensor reports measurements in its own body frame.
+Every sensor reports measurements in its own body frame. For example, a radar report the observations in
+spherical coordinates where the axes are defined by the sensor's orientation. This means that even if multiple
+sensors observe the same object, each measurement is different until transformed to a common frame.
 
-IMAGE OF BODY FRAME FROM OLDER POST
+![radar](/assets/img/navigation/coordinates-transformations/radar.gif){: width="300" }
 
 ### Body-Frame Measurements
 
@@ -44,18 +46,19 @@ IMAGE OF BODY FRAME FROM OLDER POST
 - Cameras detect pixels relative to their optical center
 - Radars measure range and bearing from their antenna
 
-### Radar Shperical Coordinates
-
-![radar](/assets/img/navigation/coordinates-transformations/radar.gif)
+### Radar Spherical Coordinates
 
 The figure shows a radar observing a plane in the distance. The radar reports bearing and distance measurements in its
 own body frame.
+
 In this example, the radar’s orientation is aligned with ENU, so the measurements can be directly interpreted in ENU
 coordinates.
 
-LINK SPHERICAL COORDINATES
-
 ![enu-observation](/assets/img/navigation/coordinates-transformations/enu-observation.gif)
+
+{: .text-center}
+_This was explained more in depth
+in the [**Why Body Frames Matter**](/posts/body-frames/#what-is-an-spherical-coordinate){:target="_blank"} post._
 
 ## Why Origins Matters
 
@@ -76,20 +79,16 @@ A radar station observes an unknown target at two different times:
 - At time $$t_2$$: Bearing $$\theta_2$$, Azimuth $$\phi_2$$, range $$r_2$$
 - Time difference: $$\Delta t = t_2 - t_1$$
 
-CODE
-
-```rust
-```
-
-If both points
-
-$$p_1, p_2 \in \text{ENU} $$
+$$
+\text{When}: \\[6pt]
+\begin{aligned}
+p_1, p_2 \in \text{ENU}
+\end{aligned}
+$$
 
 We can compute:
 
-- Velocity
-
-$$v = \frac{p_2 - p_1}{\Delta t}$$
+$$velocity = \frac{p_2 - p_1}{\Delta t}$$
 
 ```rust
 struct Velocity<CoordinateFrame> {
@@ -108,7 +107,7 @@ where
     ) -> Self {
         let delta_point = current_coordinate.to_point() - previous_coordinate.to_point();
         let velocity = delta_point / dt.get::<second>();
-    
+
         Self {
             inner: velocity,
             system: std::marker::PhantomData,
@@ -152,7 +151,7 @@ where
         let x = self.inner.x;
         let y = self.inner.y;
         let z = self.inner.z;
-        
+
         if x == 0. && y == 0. && z == 0. {
             return None;
         }
@@ -185,7 +184,7 @@ simplicity will be aligned with ENU.
 We want to convert these observations into:
 
 - Position in ENU and world coordinate
-- Velocity estimatino
+- Velocity estimation
 - Heading estimation
 
 ![enu-observation](/assets/img/navigation/coordinates-transformations/enu-observation.gif)
@@ -194,25 +193,68 @@ We want to convert these observations into:
 
 Visualize a pipeline of coordinate transformations.
 
-Radar Spherical -> Radar Cartesian -> ENU
-
-### Where should I look from my Position
-
-Now that I know the plane position I want to know how much should I rotate to point towards it, so we need to convert
-from cartesian coordiantes to spherical coordinates.
-
-SPHERICAL COORDIANTE CALCULATED (1º, 12º, 203m)
-
-FORMULA
-
-CODE
-
-```rust
-```
+Radar Spherical -> Radar Cartesian RFU -> ENU -> ECEF -> WGS84
 
 ### Code Example
 
 ```rust
+// We define our systems
+cartesian_system!(pub struct RadarEnu using ENU);
+
+fn main() {
+    // We know the radar global position
+    let radar_wgs84 = Coordinate::<Wgs84>::new(
+        Latitude::new(Angle::new::<degree>(33.6954)).unwrap(),
+        Longitude::new(Angle::new::<degree>(-78.8802)).unwrap(),
+        Altitude::new(Length::new::<meter>(3.)),
+    );
+
+    // First observation
+    let radar_aircraft_observation = Observation::new(
+        Coordinate::<RadarEnu>::from_bearing(
+            Bearing::new(Azimuth::from_degrees(129.3), Elevation::from_degrees(23.7)),
+            Length::new::<meter>(173.5),
+        ),
+        SystemTime::now(),
+    );
+
+    // Second observation after 2 seconds
+    let radar_aircraft_second_observation = Observation::new(
+        Coordinate::<RadarEnu>::from_bearing(
+            Bearing::new(Azimuth::from_degrees(102.0), Elevation::from_degrees(28.0)),
+            Length::new::<meter>(171.6),
+        ),
+        SystemTime::now() + Duration::from_secs(2),
+    );
+
+    let transform_ecef_to_ground_enu = RigidBodyTransform::wgs84_to_enu(&radar_wgs84);
+    let first_observation_ecef =
+        transform_ecef_to_ground_enu.inverse_transform(*radar_aircraft_observation.observation());
+    let second_observation_ecef = transform_ecef_to_ground_enu
+        .inverse_transform(*radar_aircraft_second_observation.observation());
+
+    println!(
+        "Radar confirmed aircraft at {}",
+        &first_observation_ecef.to_wgs84()
+    );
+    println!(
+        "Radar confirmed aircraft at {} after 2 seconds",
+        &second_observation_ecef.to_wgs84()
+    );
+
+    let observation_pair = PairObservation::new(
+        radar_aircraft_observation,
+        radar_aircraft_second_observation,
+    );
+
+    let velocity = observation_pair.velocity();
+    let orientation = observation_pair.orientation(Roll::from_degrees(0.0));
+
+    // Radar confirmed aircraft at 33.69449280498643°N, 78.87887402595308°W, 72.73991943263148m
+    // Radar confirmed aircraft at 33.69511598353151°N, 78.87860151788037°W, 83.56311827725594m after 2 seconds
+    // Estimated Velocity 37.19303456899246 m/s (12.632376154427835, 34.56094180765216, 5.411672062439869)
+    // Roll: 0.000000 deg, Pitch: 8.366367 deg, Yaw: 69.922127 deg measured from East towards North
+}
 ```
 
 ## Second Problem: Distributed Tracking
@@ -224,7 +266,7 @@ observation of a moving car. So we need to take the estimated heading from the f
 observation to calculate the second object position / heading ( Course Over Ground ) because we don't know where the
 first object is pointing the only we know is the direction.
 
-![enu-multiple-observation](/assets/img/navigation/coordinates-transformations/enu-multiple-observation-2.gif)
+![enu-multiple-observation](/assets/img/navigation/coordinates-transformations/enu-multiple-observation.gif)
 
 ### Line of Sight (LOS)
 
@@ -237,12 +279,17 @@ FORMULA
 ```rust
 ```
 
-### Where should I look from my Position
-
 ### Resolution
 
 ```rust
 ```
+
+## Third Problem: Local Attitude to Point Toward a Known Target
+
+### Scenario Description
+
+Now we have the target's absolute position expressed in WGS-84 (lat, lon, alt).
+We also know the observer’s absolute position in WGS-84.
 
 ## Landmark Navigation
 
