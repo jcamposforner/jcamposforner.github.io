@@ -10,6 +10,15 @@ math: true
 read_complexity: 1.5
 ---
 
+Before reading this post, make sure you’re familiar with the previous chapters in this series, as they establish the
+foundations for frames, navigation, and orientation:
+
+1. [**Why Coordinate Frames Matter**](/posts/coordinates-frames/){:target="_blank"}
+2. [**Why Body Frames Matter**](/posts/body-frames/){:target="_blank"}
+3. [**Earth Coordinates**](/posts/earth-coordinates/){:target="_blank"}
+
+## Introduction
+
 A **Local Tangent Plane (LTP)** approximates the Earth's surface as flat around a specific point. This simplification
 allows
 navigation systems to compute distances, directions, and orientations easily within small areas, typically within a few

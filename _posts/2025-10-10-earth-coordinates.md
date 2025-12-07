@@ -10,6 +10,12 @@ read_complexity: 2
 
 ![earth](/assets/img/navigation/geodetic/earth.png)
 
+Before reading this post, make sure you’re familiar with the previous chapters in this series, as they establish the
+foundations for frames of reference in navigation systems.
+
+1. [**Why Coordinate Frames Matter**](/posts/coordinates-frames/){:target="_blank"}
+2. [**Why Body Frames Matter**](/posts/body-frames/){:target="_blank"}
+
 ## Understanding Earth's Coordinate Reference Frames
 
 Before we can start talking about local tangent planes like **NED** or **ENU**, which need to be aligned with magnetic
