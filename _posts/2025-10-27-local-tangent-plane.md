@@ -488,7 +488,7 @@ origin. Beyond this range, the **Earth's curvature** becomes significant, and we
 systems
 like WGS84 for **accurate navigation**.
 
-In the [**next post**](/posts/coordinate-transformation-heading-estimation-measurements/){:target="_blank"}, **we’ll bring it all together: body frames, LTPs, WGS84, and sensor observations**, showing how
+In the [**next post**](/posts/target-acquisition/){:target="_blank"}, **we’ll bring it all together: body frames, LTPs, WGS84, and sensor observations**, showing how
 multiple
 coordinate frames can be combined to solve complex navigation problems involving UAVs, ships, or land vehicles. You’ll
 see how local and global perspectives work together in real-world scenarios.
