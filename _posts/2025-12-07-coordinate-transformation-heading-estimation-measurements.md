@@ -720,6 +720,7 @@ cartesian_system!(pub struct ObserverRFU using RFU);
 cartesian_system!(pub struct ObserverENU using ENU);
 
 fn main() {
+    // Sagrada Familia wgs84 position
     let landmark = Landmark::new(
         Coordinate::<Wgs84>::new(
             Latitude::from_degrees(41.4036576).unwrap(),
@@ -727,11 +728,14 @@ fn main() {
             Altitude::from_meters(46.5),
         ),
     );
+    
+    // Observer's measurement of the landmark in its local RFU frame
     let observation = Coordinate::<ObserverRFU>::from_bearing(
         Bearing::new(Azimuth::from_degrees(40.8), Elevation::from_degrees(0.0)),
         Length::new::<meter>(792.78),
     );
 
+    // Observer's orientation: facing 140° from North in ENU frame
     let observer_orientation = Orientation::<ObserverENU>::from_tait_bryan(TaitBryanAngles::new(
         Roll::new(Angle::new::<degree>(0.0)),
         Pitch::new(Angle::new::<degree>(0.0)),
