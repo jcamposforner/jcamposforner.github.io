@@ -11,6 +11,16 @@ read_complexity: 1.5
 last_modified_at: 2025-10-31 00:00:00 +0000
 ---
 
+## Prerequisites & Assumptions
+
+Before reading this post, you should be familiar with the previous chapters:
+
+1. [**Why Coordinate Frames Matter**](/posts/coordinates-frames/){:target="_blank"}
+2. [**Why Body Frames Matter**](/posts/body-frames/){:target="_blank"}
+3. [**Earth Coordinates**](/posts/earth-coordinates/){:target="_blank"}
+
+## Introduction
+
 A **Local Tangent Plane (LTP)** approximates the Earth's surface as flat around a specific point. This simplification
 allows
 navigation systems to compute distances, directions, and orientations easily within small areas, typically within a few
@@ -478,7 +488,7 @@ origin. Beyond this range, the **Earth's curvature** becomes significant, and we
 systems
 like WGS84 for **accurate navigation**.
 
-In the next post, **we’ll bring it all together: body frames, LTPs, WGS84, and sensor observations**, showing how
+In the [**next post**](/posts/coordinate-transformation-heading-estimation-measurements/){:target="_blank"}, **we’ll bring it all together: body frames, LTPs, WGS84, and sensor observations**, showing how
 multiple
 coordinate frames can be combined to solve complex navigation problems involving UAVs, ships, or land vehicles. You’ll
 see how local and global perspectives work together in real-world scenarios.

@@ -8,6 +8,14 @@ math: true
 read_complexity: 2
 ---
 
+## Prerequisites & Assumptions
+
+Before reading this post, you should be familiar with the previous chapters:
+
+1. [**Why Coordinate Frames Matter**](/posts/coordinates-frames/){:target="_blank"}
+
+## Introduction
+
 [Remember our coordinate frame confusion?](/posts/coordinates-frames/){:target="_blank"} It gets even more interesting
 when two observers are looking at the same
 object. This is where body frames become absolutely essential.

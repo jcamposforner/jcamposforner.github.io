@@ -10,6 +10,13 @@ read_complexity: 2
 
 ![earth](/assets/img/navigation/geodetic/earth.png)
 
+## Prerequisites & Assumptions
+
+Before reading this post, you should be familiar with the previous chapters:
+
+1. [**Why Coordinate Frames Matter**](/posts/coordinates-frames/){:target="_blank"}
+2. [**Why Body Frames Matter**](/posts/body-frames/){:target="_blank"}
+
 ## Understanding Earth's Coordinate Reference Frames
 
 Before we can start talking about local tangent planes like **NED** or **ENU**, which need to be aligned with magnetic
