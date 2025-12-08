@@ -10,8 +10,9 @@ read_complexity: 2
 
 ![earth](/assets/img/navigation/geodetic/earth.png)
 
-Before reading this post, make sure you’re familiar with the previous chapters in this series, as they establish the
-foundations for frames of reference in navigation systems.
+## Prerequisites & Assumptions
+
+Before reading this post, you should be familiar with the previous chapters:
 
 1. [**Why Coordinate Frames Matter**](/posts/coordinates-frames/){:target="_blank"}
 2. [**Why Body Frames Matter**](/posts/body-frames/){:target="_blank"}

@@ -10,8 +10,9 @@ math: true
 read_complexity: 1.5
 ---
 
-Before reading this post, make sure you’re familiar with the previous chapters in this series, as they establish the
-foundations for frames, navigation, and orientation:
+## Prerequisites & Assumptions
+
+Before reading this post, you should be familiar with the previous chapters:
 
 1. [**Why Coordinate Frames Matter**](/posts/coordinates-frames/){:target="_blank"}
 2. [**Why Body Frames Matter**](/posts/body-frames/){:target="_blank"}
@@ -487,7 +488,7 @@ origin. Beyond this range, the **Earth's curvature** becomes significant, and we
 systems
 like WGS84 for **accurate navigation**.
 
-In the next post, **we’ll bring it all together: body frames, LTPs, WGS84, and sensor observations**, showing how
+In the [**next post**](/posts/coordinate-transformation-heading-estimation-measurements/){:target="_blank"}, **we’ll bring it all together: body frames, LTPs, WGS84, and sensor observations**, showing how
 multiple
 coordinate frames can be combined to solve complex navigation problems involving UAVs, ships, or land vehicles. You’ll
 see how local and global perspectives work together in real-world scenarios.

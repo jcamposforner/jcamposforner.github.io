@@ -1,15 +1,16 @@
 ---
 title: "Navigation Systems: Target Acquisition"
-description: "A comprehensive guide to coordinate transformations in navigation systems, from sensor measurements to target tracking and heading estimation"
+description: "A comprehensive guide to coordinate transformations in navigation systems, from sensor measurements to target tracking and orientation estimation"
 categories: [ Navigation, Coordinate Transformations, Coordinate Frames, Target Tracking, Sensor Fusion ]
-tags: [ Navigation, Coordinate Systems, Reference Frames, Earth Coordinates, Earth, NED, Orientation, Position, Geospatial, Bearing Measurements, Heading Estimation ]
+tags: [ Navigation, Coordinate Systems, Reference Frames, Earth Coordinates, Earth, NED, Orientation, Position, Geospatial, Bearing Measurements, Orientation Estimation ]
 hidden: false
 math: true
 read_complexity: 2.0
 ---
 
-Before reading this post, make sure you’re familiar with the previous chapters in this series, as they establish the
-foundations for frames, navigation, and orientation:
+## Prerequisites & Assumptions
+
+Before reading this post, you should be familiar with the previous chapters:
 
 1. [**Why Coordinate Frames Matter**](/posts/coordinates-frames/){:target="_blank"}
 2. [**Why Body Frames Matter**](/posts/body-frames/){:target="_blank"}
@@ -19,40 +20,28 @@ foundations for frames, navigation, and orientation:
 ## Introduction
 
 Sensors never measure the world in a global reference frame, they measure what
-they see relative to themselfs. But navigation, tracking and sensor fusion requires
-that all observations are on the same frame.
+they see relative to their own frame. However, navigation, tracking and sensor fusion requires
+that all observations are on the common frame.
 
-Without transforming the sensors observations into the same frame, we could not:
+Without transforming the sensors observations into the common frame, we cannot:
 
 - Combine measurements from multiple sensors
 - Track a target's position over time
 - Estimate motion
-- Multi-sensor fusion would be impossible
+- Perform multi-sensor fusion
 
-These coordinates transformations is the gap between what each sensors see and what we need
-to know to navigate, track and making decisions. Without them, each sensor observation is
-isolated in his [**own frame**](/posts/body-frames/){:target="_blank"}, and we cannot make any of this.
-
-Think of it this way:
-
-- A radar sees a target at a certain angle and range in its [**own frame**](/posts/body-frames/){:target="_blank"}.
-- A camera on the same platform sees the same target, but in pixels relative to its optical center.
-- An IMU measures accelerations in a completely different orientation.
-
-Without transforming all of these measurements into a common frame,
+These coordinates transformations are the gap between what each sensors see and what we need
+to know to navigate, track and make decisions. Without them, each sensor observation is
+isolated in its [**own frame**](/posts/body-frames/){:target="_blank"}. Without transforming all of these measurements
+into a common frame,
 like [**ENU or NED**](/posts/local-tangent-plane/){:target="_blank"}, we could never determine where the target really
 is, how it is moving, or predict its future position.
 
-## Sensors Measure in Their Own Frame
-
-Every sensor reports measurements in its own body frame. For example, a radar report the observations in
-spherical coordinates where the axes are defined by the sensor's orientation. This means that even if multiple
-sensors observe the same object, each measurement is different until transformed to a common frame.
-
-![radar](/assets/img/navigation/coordinates-transformations/radar.gif){: width="300" }
-<center><em>Figure 1: Radar</em></center>
-
 ### Body-Frame Measurements
+
+![frd](/assets/img/navigation/body-frames/frd.png){: width="640" }
+
+---
 
 - IMUs provide acceleration and angular velocity
 - Cameras detect pixels relative to their optical center
@@ -60,17 +49,12 @@ sensors observe the same object, each measurement is different until transformed
 
 ### Radar Spherical Coordinates
 
-The figure shows a radar observing a plane in the distance. The radar reports bearing and distance measurements in its
-own body frame.
+Radar is a classic example of a sensor that measures in its own body frame using spherical coordinates. But these
+measurements
+need to be transformed into a common frame to be useful.
 
-In this example, the radar’s orientation is aligned with
-[**ENU**](/posts/local-tangent-plane/#east-north-up-enu){:target="_blank"}, so the measurements can be directly
-interpreted in
-[**ENU**](/posts/local-tangent-plane/#east-north-up-enu){:target="_blank"}
-coordinates.
-
-![enu-observation](/assets/img/navigation/coordinates-transformations/enu-observation.gif)
-<center><em>Figure 2: ENU Observation</em></center>
+![radar](/assets/img/navigation/coordinates-transformations/radar.gif){: width="300" }
+<center><em>Figure 1: Radar</em></center>
 
 ---
 
@@ -78,18 +62,35 @@ coordinates.
 _This was explained more in depth
 in the [**Why Body Frames Matter**](/posts/body-frames/#what-is-an-spherical-coordinate){:target="_blank"} post._
 
-## Why Origins Matters
+## Bearing Conventions Used
 
-It's not enough to know the direction of the measurement, you must also know where sensor is located
-in a global reference fame, two identical bearing measurements have completely different meanings if:
+We will follow **aviation and radar conventions** for spherical coordinates:
+
+- **Azimuth:** Horizontal angle measured clockwise from North
+    - 0° = North
+    - 90° = East
+    - 180° = South
+    - 270° = West
+- **Elevation:** Vertical angle measured from the horizontal plane
+    - 0° = parallel to ground
+    - +90° = straight up
+    - -90° = straight down
+
+- **Range:** Distance in meters from the sensor to the target
+
+## Why Origins Matter
+
+It's not enough to know the direction of the measurement, you must also know where the sensor is located
+in a reference frame, two identical bearings can correspond to very different target positions depending on the
+sensor’s origin:
 
 - The sensor is at the origin of the [**ENU**](/posts/local-tangent-plane/#east-north-up-enu){:target="_blank"} frame
 - The sensor is located at 2km east (2000,0,0)
-- The [**WGS84**](/posts/earth-coordinates/){:target="_blank"} origin is different
+- The [**Local Tangent Plane (LTP)**](/posts/local-tangent-plane/){:target="_blank"} origin are different
 
-Coordinate systems differ not only by orientation but also by origin.
+_Coordinate systems differ not only by orientation but also by origin._
 
-## Estimating Heading and Velocity of a Moving Object
+## Estimating Orientation and Velocity of a Moving Object
 
 A radar station observes an unknown target at two different times:
 
@@ -97,16 +98,33 @@ A radar station observes an unknown target at two different times:
 - At time $$t_2$$: Bearing $$\theta_2$$, Azimuth $$\phi_2$$, range $$r_2$$
 - Time difference: $$\Delta t = t_2 - t_1$$
 
+With these two observations, we can estimate:
+
 $$
 \text{When}: \\[6pt]
 \begin{aligned}
-p_1, p_2 \in \text{ENU}
+p_1, p_2 \in \text{Frame} \\[6pt]
 \end{aligned}
 $$
 
-We can compute:
+### Velocity
 
-$$velocity = \frac{p_2 - p_1}{\Delta t}$$
+$$velocity = \frac{\Delta p}{\Delta t}$$
+
+---
+
+<center><em><small><b>Notes</b></small></em></center>
+
+<ul>
+<li>
+  <em><small>
+      In the real world calculating velocity like this <b>amplifies sensor noise</b>, 
+      this is why we need filters like <b><a href="https://en.wikipedia.org/wiki/Kalman_filter" target="_blank">Kalman filters</a></b> to smooth out these estimates.
+</small></em>
+</li>
+</ul>
+
+---
 
 ```rust
 struct Velocity<CoordinateFrame> {
@@ -134,7 +152,12 @@ where
 }
 ```
 
-- Heading, we cannot get the roll so it need to be passed
+---
+
+### Orientation
+
+To calculate the **yaw** ($$\psi$$) and **pitch** ($$\theta$$) from the **velocity vector** ($$v$$), we use the
+following formulas:
 
 {: .text-center}
 **Given a vector** $$\vec{v} = (x, y, z) \neq (0,0,0) \\[8pt]$$
@@ -165,10 +188,14 @@ $$
 
 <ul>
 <li>
-  <em><small>In ENU, Z points up, so pitch positive means nose up.</small></em>
+<em><small>In <b>ENU</b>, <b>Z</b> points up, so <b>pitch positive</b> means nose up.</small></em>
 </li>
 <li>
-  <em><small>In NED, Z points down, so we flip the sign (-z) so that pitch positive still means nose up.</small></em>
+<em><small>In <b>NED</b>, the <b>Z</b> axis points Down. To maintain the convention that <b>positive pitch</b> corresponds to the nose pointing 
+up, we must apply <b>-Z</b> in the <b>pitch</b> calculation</small></em>
+</li>
+<li>
+<em><small>The function <b>atan2(y, x)</b> returns the <b>yaw</b> in the range <b>(-π, π)</b>, measured counter-clockwise from the positive X-axis.</small></em>
 </li>
 </ul>
 
@@ -214,31 +241,69 @@ where
 }
 ```
 
-## First Problem: Estimating Target Position from Radar Measurements
+### Limitations of Position-Based Orientation Estimation
+
+When estimating orientation from position changes, there are some limitations to consider:
+
+**What We CAN Estimate:**
+
+- **Yaw:** Derived from horizontal velocity components **(x, y)**
+- **Pitch:** Derived from vertical velocity component **(z)** relative to horizontal plane
+
+**What We CANNOT Estimate:**
+
+- **Roll** cannot be measured from position observations alone and must be provided.
+
+This is because **multiple roll angles produce the same trajectory**. Consider an aircraft:
+
+- **Roll** = 0° flying straight
+- **Roll** = 45° in coordinated turn
+
+Both can produce identical position sequences, but the observations made by the aircraft will
+differ.
+
+**Solutions:**
+
+1. **For External Tracking (radar observing target):**
+    - Assume constraints based, for example, ground vehicles: roll = 0°
+    - Use additional sensors if available
+
+2. **For Own Navigation:**
+    - Use IMU/gyroscopes for direct roll measurement
+    - Combine accelerometers and magnetometers for attitude estimation
+    - Apply sensor fusion techniques (covered in next chapter)
+
+In our examples, we assume $$roll = 0^\circ$$ for **simplicity**, which is reasonable for:
+
+- Ground vehicles on flat terrain
+- Aircraft in straight and level flight
+- Ships in calm seas
+
+## First Problem: Estimating Target Position from Radar Observation
 
 ### Scenario Description
 
-A radar observes a target, each observation is a spherical measurement on the radar's body frame. The radar's body frame
-for
-simplicity will be aligned with ENU.
-
-We want to convert these observations into:
-
-- Position in ENU and world coordinate
-- Velocity estimation
-- Heading estimation
+A radar observes a target in the sky, we want to determine where is the target in world coordinates. Also, we want to
+estimate its velocity and orientation based on two observations separated by time.
 
 ![enu-observation](/assets/img/navigation/coordinates-transformations/enu-observation.gif)
-<center><em>Figure 3: Radar Observation</em></center>
+<center><em>Figure 2: Radar Observation</em></center>
 
 ### Coordinate Transformation Pipeline
 
-To know how to transform these observations into world coordinates, we need to know the radar's global position in
+We need to know the **radar's global position** in
 [**WGS84**](/posts/earth-coordinates/){:target="_blank"} and its orientation ( here **aligned** with **ENU** for
-**simplicity** ), but we should transform from body frame to ENU / NED.
+**simplicity** ).
+
+We have seen how to transform a single observation from spherical to cartesian coordinates in the **radar's body
+frame.**
+
+1. Transform the **radar observation** into the **common frame**
+2. Convert the observation into **world coordinates** using the radar's global position and orientation.
+3. Estimate the **velocity** and **orientation** based on two observations.
 
 ![coordinate-transformation-pipeline](/assets/img/navigation/coordinates-transformations/coordinate-transformation-pipeline.png)
-<center><em>Figure 4: Coordinate Transformation Pipeline</em></center>
+<center><em>Figure 3: Coordinate Transformation Pipeline</em></center>
 
 ---
 
@@ -314,7 +379,7 @@ fn main() {
 
 <ul>
 <li>
-  <em><small>The time of 2 seconds between observations is arbitrary for demonstration purposes. So it's not realistic</small></em>
+  <em><small>The time of 2 seconds between observations is arbitrary for demonstration purposes. Therefore, it is not realistic</small></em>
 </li>
 </ul>
 
@@ -324,24 +389,32 @@ fn main() {
 
 ### Scenario Description
 
-After the first problem present the next problem about the same moving target reporting to the ENU base station, and
-observation of a moving car. So we need to take the estimated heading from the first object and get the same DT
-observation to calculate the second object position / heading ( Course Over Ground ) because we don't know where the
-first object is pointing the only we know is the direction.
+The second scenario involves two moving objects:
+
+- An aircraft observed by a ground-based radar
+- A car observed by the aircraft
+
+We want to determine the car's position in the radar's ENU frame, based on observations from both the radar and the
+aircraft.
 
 ![enu-multiple-observation](/assets/img/navigation/coordinates-transformations/enu-multiple-observation.gif)
-<center><em>Figure 5: ENU Distributed Observation</em></center>
+<center><em>Figure 4: ENU Distributed Observation</em></center>
 
-### Line of Sight (LOS)
+### Coordinate Transformation Pipeline
 
-Line of Sight (LOS)
+The pipeline to resolve the car's position in world coordinates involves multiple transformations:
 
-The vector to get from the observer coordinate to the target coordinate.
+1. Transform the **radar aircraft observation** into the **common frame**
+2. Convert the observation into **world coordinates**
+3. Create the **aircraft's local frame** based on its position and orientation
+    1. When the aircraft moves, we need to update its origin
+4. Transform the **aircraft car observation** into the **common frame**
+5. Convert the observation into **world coordinates**
+6. Finally, transform the car's world coordinates back into the **radar's ENU frame**
+7. Estimate the **car's velocity** and **orientation** based on two observations.
 
-FORMULA
-
-```rust
-```
+![enu-multiple-observation](/assets/img/navigation/coordinates-transformations/distributed-pipeline.png)
+<center><em>Figure 5: ENU Distributed Observation Pipeline</em></center>
 
 ### Resolution
 
@@ -444,6 +517,7 @@ fn main() {
 
     let car_position_in_radar_enu = radar.transform_to_enu(car_position_in_ecef);
 
+    // Change aircraft origin to second observation to add a Translation, because the new observation is from a moving aircraft
     aircraft.change_origin(ecef_second_aircraft_observation);
 
     let car_second_position_in_ecef = aircraft.observe(
@@ -505,24 +579,83 @@ fn main() {
 
 ### Scenario Description
 
-Now we have the target's absolute position expressed in WGS-84 (lat, lon, alt).
-We also know the observer’s absolute position in WGS-84.
+After knowing the target's global position from previous observations, we want to point directly at it to track the
+target. To do this, we need to calculate the bearing from its own position
+to the target's, this allows the radar to aim precisely at the target in 3D space.
+
+1. Convert the **world coordinate** into the local frame
+2. Convert the **cartesian** into **spherical coordinates**
+
+```rust
+impl<System> Coordinate<System>
+where
+    System: CartesianSystem + BearingConversion,
+{
+    pub fn to_spherical(&self) -> SphericalCoordinate<System> {
+        SphericalCoordinate::from(self)
+    }
+
+    pub fn bearing_from_origin(&self) -> Bearing<System> {
+        let spherical = self.to_spherical();
+
+        System::spherical_to_bearing(spherical.polar, spherical.azimuth)
+    }
+}
+
+fn main() {
+    // Continue from second example...
+    let bearing_to_car_position_from_radar = car_position_in_radar_enu.bearing_from_origin();
+    let car_position_distance = car_position_in_radar_enu.distance_from_origin();
+
+    // Radar bearing to target: azimuth -98.276°, elevation -2.855°, range 306.4m
+}
+```
 
 ## Landmark Navigation
 
-Landmark navigation, convergence algorithm to estimate position based on multiple observations from known landmarks.
+When you're in an **unknown location** and, you don’t know where you are, one method of knowing your position is by
+**observing** known landmarks. By **measuring** the direction and distance to these landmarks, you can estimate your
+position.
 
 ### Observing a Known Landmark
 
-Example of a known landmark
+A **known landmark** is any object whose coordinates are already known, for example the **Sagrada Família**.
 
 ![landmark](/assets/img/navigation/coordinates-transformations/sagrada-familia.png)
-<center><em><small>Figure 6: La Sagrada Familia, Barcelona, Spain </small></em></center>
+<center><em><small>Figure 5: La Sagrada Familia, Barcelona, Spain </small></em></center>
 
 ### Convergence algorithm
 
-Explain convergence algorithm to estimate observer position based on landmark observation. And why it needs to be
-iterative
+Once you have observed a landmark, to estimate your global position, you can use an
+iterative convergence algorithm.
+
+You must have the following requisites:
+
+- The landmark's global position is known in **world coordinates**
+- Your observation of the landmark is expressed in your **local frame**
+- The **orientation** of your local frame with respect to North and East
+
+### Mechanism of the ECEF Correction
+
+The convergence relies on using the **known position** of the landmark to **correct** our **unknown position**. Each
+iteration
+performs a **correction** in the **ECEF** frame:
+
+- Calculate Estimated **Landmark world coordinate** ($$\mathbf{\hat{p}}_{\text{LM, ECEF}}$$)
+- **Determine Error Vector**: The error vector is the difference between this
+  calculated position and the known, true landmark
+  position ($$\mathbf{p}_{\text{LM, ECEF}}$$).
+
+$$\text{Error} = \mathbf{\hat{p}}_{\text{LM, ECEF}} - \mathbf{p}_{\text{LM, ECEF}}$$
+
+- **Correct Observer Position**: By subtracting this error vector from our current world position
+  estimation ($$\mathbf{p}_{\text{obs, ECEF}}^{\text{old}}$$), we shift our estimation closer to the true origin of the
+  observation
+
+$$\mathbf{p}_{\text{obs, ECEF}}^{\text{new}} = \mathbf{p}_{\text{obs, ECEF}}^{\text{old}} - \text{Error}$$
+
+This process is repeated until the error vector is below a defined threshold or maximum iterations is reached.
+
 ---
 
 ```rust
@@ -531,8 +664,14 @@ pub struct LandmarkObservation<System> {
     _system: std::marker::PhantomData<System>,
 }
 
+/// Convergence threshold in meters. 
+/// 1e-6m = 1 micrometer is well below typical GPS error (1-3m),
+/// so further refinement provides no practical benefit.
 const CONVERGENCE_THRESHOLD: f64 = 1e-6;
-// It should converge in max 3 iterations
+
+/// Typically converges in 1-2 iterations for well-conditioned geometry.
+/// If >3 iterations needed, geometry is likely poorly conditioned
+/// (landmarks nearly collinear) or landmark position is wrong.
 const CONVERGENCE_MAX_ITERATIONS: Range<u8> = 0..3;
 
 impl<System> LandmarkObservation<System>
@@ -579,18 +718,65 @@ where
 ```
 
 --- 
+
 ![estimated-distance-landmark](/assets/img/navigation/coordinates-transformations/estimated-distance.png){: width="
 640" }
 <center><em><small>Figure 7: Estimated position </small></em></center>
 
-## What we can do with this estimations
+---
 
-Explain what we can do with these estimations, like sensor fusion, tracking, know the distances from multiple targets,
-calculate spherical coordinates to lock on targets, how to know if we're approaching or moving away from them, how to
-know if it is the same target.
+**Note on Landmark Geometry:** The accuracy of the estimation from landmarks depends on their geometry. This is
+quantified by the
+[**Geometric Dilution of Precision (GDOP)**](https://en.wikipedia.org/wiki/Dilution_of_precision){: target="_blank"}
+metric.
+
+---
+
+## Applications of Target Estimations
+
+Once we have these data, we have tons of applications:
+
+1. **Sensor Fusion**  
+   By converting all sensor measurements to a common frame, we can combine information from
+   multiple sources.
+
+2. **Tracking and Prediction**  
+   Knowing the velocity and orientation of moving targets allows us to predict their future positions, which is crucial
+   for collision avoidance, autonomous navigation, and air/ground traffic monitoring.
+
+3. **Target Identification**  
+   Comparing positions, velocities, and orientations over time can help determine whether observations at different
+   times correspond to the same object. This is essential for tracking multiple targets simultaneously.
+
+4. **Engagement and Control**  
+   Converting global target positions into local azimuth, elevation, and range allows platforms like radar or weapon
+   systems to accurately aim or orient sensors toward moving targets.
+
+5. **Relative Navigation**  
+   If the absolute position of the observer is uncertain, using landmarks or other targets allows iterative refinement
+   of our global position estimate.
+
+---
+
+## Limitations and Sources of Error
+
+While these estimations are useful, there are some important considerations:
+
+- **Sensor Noise:** All sensors have measurement errors and biases which propagate through coordinate transformations.
+- **Timing Errors:** Small differences in timestamps can lead to large errors in velocity and orientation estimation.
+- **Frame Misalignment:** Assuming incorrect orientation or origin for the sensor can lead to large errors in target
+  position.
+
+---
 
 ## So What’s Next?
 
-Explain that these estimations are useful for sensor fusion and tracking, but they can have errors due to noise and
-other
-factors. Introduce the idea of Kalman Filters.
+To mitigate these errors, we need advanced filtering techniques. The
+[**Kalman Filter**](https://en.wikipedia.org/wiki/Kalman_filter){: target="_blank"} is an algorithm that allows us to:
+
+- **Fuse noisy measurements** from multiple sensors
+- **Estimate** variables
+- **Predict future** positions
+
+In the next post, we’ll dive into **Kalman Filtering and Multi-Sensor Fusion**, showing how to combine radar, camera,
+and **IMU** data to track our own position and moving targets with high accuracy.

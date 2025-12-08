@@ -8,9 +8,9 @@ math: true
 read_complexity: 2
 ---
 
+## Prerequisites & Assumptions
 
-Before reading this post, make sure you’re familiar with the previous chapters in this series, as they establish the
-foundations for frames of reference in navigation systems.
+Before reading this post, you should be familiar with the previous chapters:
 
 1. [**Why Coordinate Frames Matter**](/posts/coordinates-frames/){:target="_blank"}
 
