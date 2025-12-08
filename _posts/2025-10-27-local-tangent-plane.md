@@ -8,6 +8,7 @@ tags: [ Navigation, Coordinate Systems, Reference Frames, Earth Coordinates, Ear
 hidden: false
 math: true
 read_complexity: 1.5
+last_modified_at: 2025-10-31 00:00:00 +0000
 ---
 
 ## Prerequisites & Assumptions
@@ -158,7 +159,6 @@ error using both formulas is $$3.01 \times 10^{-7}\ \text{m}$$
 | 1,000        | 0.19        |
 | 10,000       | 1.96        |
 | 50,000       | 48.99       |
-
 {: style="margin-left: auto; min-width:100%; margin-right: auto; text-align: center;"}
 
 ```rust
@@ -472,7 +472,7 @@ And much more:
 - **UAV Operations**: Drones conducting inspections or deliveries in urban environments benefit from LTPs for precise
   positioning.
 - **Robotics**: Robots operating in warehouses or factories can use LTPs for accurate navigation and task execution.
-- **Mapping areas**:* LTPs are ideal for mapping small regions.
+- **Mapping areas**: LTPs are ideal for mapping small regions.
 
 **LTPs excel** when your **operational area is small enough** that Earth's curvature introduces less error than
 your sensors' inherent accuracy.
