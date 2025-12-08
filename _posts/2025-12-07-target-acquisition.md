@@ -728,7 +728,7 @@ fn main() {
             Altitude::from_meters(46.5),
         ),
     );
-    
+
     // Observer's measurement of the landmark in its local RFU frame
     let observation = Coordinate::<ObserverRFU>::from_bearing(
         Bearing::new(Azimuth::from_degrees(40.8), Elevation::from_degrees(0.0)),
@@ -791,8 +791,8 @@ Once we have these data, we have tons of applications:
    times correspond to the same object. This is essential for tracking multiple targets simultaneously.
 
 4. **Engagement and Control**  
-   Converting global target positions into local azimuth, elevation, and range allows platforms like radar or weapon
-   systems to accurately aim or orient sensors toward moving targets.
+   Converting global target positions into local azimuth, elevation, and range allows platforms to aim sensors or
+   communication systems accurately.
 
 5. **Relative Navigation**  
    If the absolute position of the observer is uncertain, using landmarks or other targets allows iterative refinement
