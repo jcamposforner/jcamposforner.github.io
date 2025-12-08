@@ -715,6 +715,44 @@ where
         observer_position_estimate
     }
 }
+
+cartesian_system!(pub struct ObserverRFU using RFU);
+cartesian_system!(pub struct ObserverENU using ENU);
+
+fn main() {
+    let landmark = Landmark::new(
+        Coordinate::<Wgs84>::new(
+            Latitude::from_degrees(41.4036576).unwrap(),
+            Longitude::from_degrees(2.1742631).unwrap(),
+            Altitude::from_meters(46.5),
+        ),
+    );
+    let observation = Coordinate::<ObserverRFU>::from_bearing(
+        Bearing::new(Azimuth::from_degrees(40.8), Elevation::from_degrees(0.0)),
+        Length::new::<meter>(792.78),
+    );
+
+    let observer_orientation = Orientation::<ObserverENU>::from_tait_bryan(TaitBryanAngles::new(
+        Roll::new(Angle::new::<degree>(0.0)),
+        Pitch::new(Angle::new::<degree>(0.0)),
+        Yaw::new(Angle::new::<degree>(140.0)),
+    ));
+
+    let transform_observer_enu_to_rfu = RigidBodyTransform::enu_to_rfu(observer_orientation);
+
+    let landmark_in_observer_ned = transform_observer_enu_to_rfu.inverse_transform(observation);
+
+    let landmark_observation = LandmarkObservation::new(landmark_in_observer_ned);
+
+    let estimated_observer_global_position =
+        landmark_observation.estimate_observer_global_position(&landmark);
+
+    // estimated observer_global_position: 41.41079504087482°N, 2.1743954712480287°E, 46.450616201111075m
+    println!(
+        "estimated observer_global_position: {}",
+        estimated_observer_global_position
+    );
+}
 ```
 
 --- 
